@@ -1,0 +1,40 @@
+<UserControl x:Class="TelemetryAnalyzer.Presentation.WPF.Controls.TelemetryChart"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:oxy="http://oxyplot.org/wpf"
+             Background="#FF1E1E1E">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Chart Controls -->
+        <Border Grid.Row="0" Background="#FF2D2D30" CornerRadius="4,4,0,0" Padding="12,8">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox Name="SpeedCheckBox" Content="Speed" Foreground="White" 
+                          IsChecked="True" Margin="0,0,12,0" Checked="ChartOption_Changed"/>
+                <CheckBox Name="RpmCheckBox" Content="RPM" Foreground="White" 
+                          IsChecked="True" Margin="0,0,12,0" Checked="ChartOption_Changed"/>
+                <CheckBox Name="ThrottleCheckBox" Content="Throttle" Foreground="White" 
+                          IsChecked="True" Margin="0,0,12,0" Checked="ChartOption_Changed"/>
+                <CheckBox Name="BrakeCheckBox" Content="Brake" Foreground="White" 
+                          IsChecked="True" Margin="0,0,12,0" Checked="ChartOption_Changed"/>
+                <CheckBox Name="GearCheckBox" Content="Gear" Foreground="White" 
+                          IsChecked="False" Margin="0,0,12,0" Checked="ChartOption_Changed"/>
+                
+                <Separator Background="#FF404040" Margin="12,0"/>
+                
+                <Button Name="ClearButton" Content="Clear" 
+                        Background="Transparent" BorderThickness="0" Foreground="White"
+                        Padding="8,4" Click="ClearButton_Click"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Chart Display -->
+        <Border Grid.Row="1" Background="#FF1A1A1A" CornerRadius="0,0,4,4">
+            <oxy:PlotView Name="TelemetryPlot" Background="Transparent"/>
+        </Border>
+    </Grid>
+</UserControl>

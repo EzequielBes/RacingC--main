@@ -1,0 +1,314 @@
+<Window x:Class="TelemetryAnalyzer.Presentation.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TelemetryAnalyzer.Presentation.WPF"
+        xmlns:controls="clr-namespace:TelemetryAnalyzer.Presentation.WPF.Controls"
+        mc:Ignorable="d"
+        Title="Telemetry Analyzer Pro" 
+        Height="1080" Width="1920"
+        WindowState="Maximized"
+        Background="#FF1E1E1E"
+        WindowStyle="None"
+        AllowsTransparency="True">
+
+    <Window.Resources>
+        <!-- Estilos Modernos -->
+        <Style x:Key="ModernButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#FF2D2D30"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#FF404040"/>
+            <Setter Property="Padding" Value="12,8"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#FF007ACC"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#FF005A9E"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernTabStyle" TargetType="TabItem">
+            <Setter Property="Background" Value="#FF2D2D30"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border Name="Border" Background="{TemplateBinding Background}"
+                                BorderThickness="0,0,0,3" BorderBrush="Transparent">
+                            <ContentPresenter x:Name="ContentSite"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            ContentSource="Header"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#FF1E1E1E"/>
+                                <Setter TargetName="Border" Property="BorderBrush" Value="#FF007ACC"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#FF3E3E42"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernTextBlockStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+        </Style>
+
+        <Style x:Key="StatusTextStyle" TargetType="TextBlock" BasedOn="{StaticResource ModernTextBlockStyle}">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="8,4"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <!-- Barra de Título Customizada -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title Bar -->
+        <Border Grid.Row="0" Background="#FF2D2D30" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0">
+                    <Image Source="Assets/logo.png" Width="24" Height="24" Margin="0,0,8,0"/>
+                    <TextBlock Text="Telemetry Analyzer Pro" 
+                             Style="{StaticResource ModernTextBlockStyle}"
+                             FontWeight="SemiBold" 
+                             VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Name="MinimizeButton" Content="─" Width="46" Height="32" 
+                            Background="Transparent" BorderThickness="0" 
+                            Foreground="White" Click="MinimizeButton_Click"/>
+                    <Button Name="MaximizeButton" Content="□" Width="46" Height="32" 
+                            Background="Transparent" BorderThickness="0" 
+                            Foreground="White" Click="MaximizeButton_Click"/>
+                    <Button Name="CloseButton" Content="✕" Width="46" Height="32" 
+                            Background="Transparent" BorderThickness="0" 
+                            Foreground="White" Click="CloseButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Toolbar -->
+        <Border Grid.Row="1" Background="#FF3E3E42" BorderBrush="#FF404040" BorderThickness="0,1">
+            <Grid Margin="16,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Connection Controls -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <ComboBox Name="SimulatorComboBox" Width="200" Height="32" 
+                              Background="#FF2D2D30" Foreground="White" BorderBrush="#FF404040"
+                              SelectedIndex="0">
+                        <ComboBoxItem Content="Auto-Detect"/>
+                        <ComboBoxItem Content="Assetto Corsa Competizione"/>
+                        <ComboBoxItem Content="Le Mans Ultimate"/>
+                        <ComboBoxItem Content="iRacing"/>
+                    </ComboBox>
+                    
+                    <Button Name="ConnectButton" Content="🔌 Connect" 
+                            Style="{StaticResource ModernButtonStyle}" 
+                            Margin="12,0,0,0" Click="ConnectButton_Click"/>
+                    
+                    <Ellipse Name="ConnectionStatusIndicator" Width="12" Height="12" 
+                             Fill="Red" Margin="12,0,0,0"/>
+                    
+                    <TextBlock Name="ConnectionStatusText" Text="Disconnected"
+                               Style="{StaticResource StatusTextStyle}"/>
+                </StackPanel>
+
+                <!-- File Operations -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Name="ImportButton" Content="📁 Import" 
+                            Style="{StaticResource ModernButtonStyle}" 
+                            Click="ImportButton_Click"/>
+                    <Button Name="ExportButton" Content="💾 Export" 
+                            Style="{StaticResource ModernButtonStyle}" 
+                            Margin="8,0,0,0" Click="ExportButton_Click"/>
+                    <Button Name="SettingsButton" Content="⚙️ Settings" 
+                            Style="{StaticResource ModernButtonStyle}" 
+                            Margin="8,0,0,0" Click="SettingsButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Content -->
+        <TabControl Grid.Row="2" Background="#FF1E1E1E" BorderThickness="0">
+            <TabControl.Resources>
+                <Style TargetType="TabControl">
+                    <Setter Property="Background" Value="#FF1E1E1E"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                </Style>
+            </TabControl.Resources>
+
+            <!-- Real-Time Tab -->
+            <TabItem Header="🏁 Real-Time" Style="{StaticResource ModernTabStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Main Telemetry Display -->
+                    <Grid Grid.Column="0" Margin="16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="200"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Track Map -->
+                        <Border Grid.Row="0" Background="#FF2D2D30" CornerRadius="8" 
+                                BorderBrush="#FF404040" BorderThickness="1">
+                            <controls:TrackMapControl x:Name="RealTimeTrackMap"/>
+                        </Border>
+
+                        <!-- Telemetry Charts -->
+                        <Border Grid.Row="1" Background="#FF2D2D30" CornerRadius="8" 
+                                BorderBrush="#FF404040" BorderThickness="1" Margin="0,8,0,0">
+                            <controls:TelemetryChart x:Name="RealTimeTelemetryChart"/>
+                        </Border>
+                    </Grid>
+
+                    <!-- Live Data Panel -->
+                    <Border Grid.Column="1" Background="#FF2D2D30" CornerRadius="8" 
+                            BorderBrush="#FF404040" BorderThickness="1" Margin="8,16,16,16">
+                        <controls:LiveDataPanel x:Name="LiveDataPanel"/>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- Lap Analysis Tab -->
+            <TabItem Header="📊 Lap Analysis" Style="{StaticResource ModernTabStyle}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Session/Lap Selector -->
+                    <Border Grid.Column="0" Background="#FF2D2D30" CornerRadius="8" 
+                            BorderBrush="#FF404040" BorderThickness="1" Margin="16">
+                        <controls:SessionLapSelector x:Name="SessionLapSelector"/>
+                    </Border>
+
+                    <!-- Analysis Display -->
+                    <TabControl Grid.Column="1" Background="Transparent" BorderThickness="0" Margin="8,16,16,16">
+                        <TabItem Header="📈 Performance" Style="{StaticResource ModernTabStyle}">
+                            <controls:PerformanceAnalysisControl x:Name="PerformanceAnalysis"/>
+                        </TabItem>
+                        
+                        <TabItem Header="🏎️ Sectors" Style="{StaticResource ModernTabStyle}">
+                            <controls:SectorAnalysisControl x:Name="SectorAnalysis"/>
+                        </TabItem>
+                        
+                        <TabItem Header="🔄 Corners" Style="{StaticResource ModernTabStyle}">
+                            <controls:CornerAnalysisControl x:Name="CornerAnalysis"/>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </TabItem>
+
+            <!-- Comparison Tab -->
+            <TabItem Header="⚖️ Compare Laps" Style="{StaticResource ModernTabStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Comparison Setup -->
+                    <Border Grid.Row="0" Background="#FF2D2D30" CornerRadius="8" 
+                            BorderBrush="#FF404040" BorderThickness="1" Margin="16,16,16,8">
+                        <controls:ComparisonSetupControl x:Name="ComparisonSetup" Height="120"/>
+                    </Border>
+
+                    <!-- Comparison Results -->
+                    <TabControl Grid.Row="1" Background="Transparent" BorderThickness="0" Margin="16,8,16,16">
+                        <TabItem Header="🗺️ Track Overlay" Style="{StaticResource ModernTabStyle}">
+                            <controls:TrackComparisonControl x:Name="TrackComparison"/>
+                        </TabItem>
+                        
+                        <TabItem Header="📊 Data Comparison" Style="{StaticResource ModernTabStyle}">
+                            <controls:DataComparisonControl x:Name="DataComparison"/>
+                        </TabItem>
+                        
+                        <TabItem Header="🎯 Insights" Style="{StaticResource ModernTabStyle}">
+                            <controls:InsightsControl x:Name="InsightsControl"/>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </TabItem>
+
+            <!-- Setup Management Tab -->
+            <TabItem Header="🔧 Setups" Style="{StaticResource ModernTabStyle}">
+                <controls:SetupManagerControl x:Name="SetupManager"/>
+            </TabItem>
+        </TabControl>
+
+        <!-- Status Bar -->
+        <Border Grid.Row="3" Background="#FF2D2D30" BorderBrush="#FF404040" BorderThickness="0,1,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Name="StatusText" Text="Ready" 
+                               Style="{StaticResource StatusTextStyle}"/>
+                    <Separator Margin="8,0" Background="#FF404040"/>
+                    <TextBlock Name="CurrentSessionText" Text="No session loaded" 
+                               Style="{StaticResource StatusTextStyle}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Name="FpsText" Text="FPS: 0" 
+                               Style="{StaticResource StatusTextStyle}"/>
+                    <Separator Margin="8,0" Background="#FF404040"/>
+                    <TextBlock Name="MemoryUsageText" Text="Memory: 0 MB" 
+                               Style="{StaticResource StatusTextStyle}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

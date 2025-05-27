@@ -1,0 +1,125 @@
+<UserControl x:Class="TelemetryAnalyzer.Presentation.WPF.Controls.PerformanceAnalysisControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:oxy="http://oxyplot.org/wpf"
+             Background="#FF1E1E1E">
+    
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="16">
+            
+            <!-- Performance Summary -->
+            <Border Background="#FF2D2D30" CornerRadius="6" Padding="16" Margin="0,0,0,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                        <TextBlock Text="Lap Time" Foreground="#FFCCCCCC" FontSize="12" HorizontalAlignment="Center"/>
+                        <TextBlock Name="LapTimeText" Text="00:00.000" Foreground="White" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                        <TextBlock Text="Max Speed" Foreground="#FFCCCCCC" FontSize="12" HorizontalAlignment="Center"/>
+                        <TextBlock Name="MaxSpeedText" Text="0 km/h" Foreground="White" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                        <TextBlock Text="Avg Speed" Foreground="#FFCCCCCC" FontSize="12" HorizontalAlignment="Center"/>
+                        <TextBlock Name="AvgSpeedText" Text="0 km/h" Foreground="White" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Column="3" HorizontalAlignment="Center">
+                        <TextBlock Text="Max G-Force" Foreground="#FFCCCCCC" FontSize="12" HorizontalAlignment="Center"/>
+                        <TextBlock Name="MaxGForceText" Text="0.0g" Foreground="White" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Performance Charts -->
+            <Border Background="#FF2D2D30" CornerRadius="6" Margin="0,0,0,16">
+                <TabControl Background="Transparent" BorderThickness="0">
+                    <TabItem Header="📊 Speed Profile" Foreground="White">
+                        <oxy:PlotView Name="SpeedProfilePlot" Height="300" Background="Transparent"/>
+                    </TabItem>
+                    
+                    <TabItem Header="🦵 Pedal Usage" Foreground="White">
+                        <oxy:PlotView Name="PedalUsagePlot" Height="300" Background="Transparent"/>
+                    </TabItem>
+                    
+                    <TabItem Header="⚙️ Gear Changes" Foreground="White">
+                        <oxy:PlotView Name="GearChangesPlot" Height="300" Background="Transparent"/>
+                    </TabItem>
+                </TabControl>
+            </Border>
+
+            <!-- Sector Analysis -->
+            <Border Background="#FF2D2D30" CornerRadius="6" Padding="16" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="🏁 Sector Analysis" Foreground="White" FontWeight="Bold" FontSize="16" Margin="0,0,0,12"/>
+                    
+                    <ItemsControl Name="SectorsList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="#FF1A1A1A" CornerRadius="4" Padding="12" Margin="0,0,0,8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <TextBlock Grid.Column="0" Text="{Binding SectorName}" Foreground="White" FontWeight="Bold" VerticalAlignment="Center"/>
+                                        <ProgressBar Grid.Column="1" Value="{Binding EfficiencyScore}" Maximum="100" 
+                                                   Height="8" Margin="12,0" Background="#FF404040"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding SectorTime, StringFormat='{}{0:mm\\:ss\\.fff}'}" 
+                                                 Foreground="White" FontWeight="Bold" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                                        <TextBlock Grid.Column="3" Text="{Binding EfficiencyScore, StringFormat='{}{0:F1}%'}" 
+                                                 Foreground="#FFCCCCCC" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Performance Issues -->
+            <Border Background="#FF2D2D30" CornerRadius="6" Padding="16">
+                <StackPanel>
+                    <TextBlock Text="⚠️ Performance Issues" Foreground="White" FontWeight="Bold" FontSize="16" Margin="0,0,0,12"/>
+                    
+                    <ItemsControl Name="IssuesList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="#FF3D1A1A" CornerRadius="4" Padding="12" Margin="0,0,0,8"
+                                        BorderBrush="Red" BorderThickness="1">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <TextBlock Grid.Column="0" Text="{Binding Type}" Foreground="Orange" FontWeight="Bold" VerticalAlignment="Top"/>
+                                        <StackPanel Grid.Column="1" Margin="12,0">
+                                            <TextBlock Text="{Binding Description}" Foreground="White" TextWrapping="Wrap"/>
+                                            <TextBlock Text="{Binding Suggestion}" Foreground="#FFCCCCCC" FontStyle="Italic" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="2" Text="{Binding TimeLost, StringFormat='-{0:ss\\.fff}s'}" 
+                                                 Foreground="Red" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
