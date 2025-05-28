@@ -1,0 +1,182 @@
+<UserControl x:Class="TelemetryAnalyzer.Presentation.WPF.Controls.LiveDataPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:TelemetryAnalyzer.Presentation.WPF.Controls"
+             xmlns:viewModels="clr-namespace:TelemetryAnalyzer.Presentation.WPF.ViewModels"
+             xmlns:converters="clr-namespace:TelemetryAnalyzer.Presentation.WPF.Converters"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance viewModels:MainViewModel, IsDesignTimeCreatable=False}"
+             Background="#FF2D2D30" Foreground="White"
+             FontFamily="Segoe UI">
+
+    <UserControl.Resources>
+        <!-- Converters -->
+        <converters:GearToStringConverter x:Key="GearToStringConverter"/>
+        <converters:AbsoluteValueConverter x:Key="AbsoluteValueConverter"/>
+
+        <!-- Styles -->
+        <Style x:Key="DataLabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#A0A0A0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="DataValueStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="DataUnitStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#A0A0A0"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Margin" Value="4,0,0,0"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="ProgressBarStyle" TargetType="ProgressBar">
+            <Setter Property="Height" Value="12"/>
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="#FF404040"/>
+        </Style>
+        <Style x:Key="ThrottleProgressBarStyle" TargetType="ProgressBar" BasedOn="{StaticResource ProgressBarStyle}">
+            <Setter Property="Foreground" Value="#FF28A745"/> <!-- Green -->
+        </Style>
+        <Style x:Key="BrakeProgressBarStyle" TargetType="ProgressBar" BasedOn="{StaticResource ProgressBarStyle}">
+            <Setter Property="Foreground" Value="#FFDC3545"/> <!-- Red -->
+        </Style>
+        <Style x:Key="ClutchProgressBarStyle" TargetType="ProgressBar" BasedOn="{StaticResource ProgressBarStyle}">
+            <Setter Property="Foreground" Value="#FF007ACC"/> <!-- Blue -->
+        </Style>
+        <Style x:Key="SteeringProgressBarStyle" TargetType="ProgressBar" BasedOn="{StaticResource ProgressBarStyle}">
+            <!-- Use a gradient or different style for steering? -->
+            <Setter Property="Foreground" Value="#FF17A2B8"/> <!-- Cyan -->
+        </Style>
+        <Style x:Key="InputLabelStyle" TargetType="TextBlock">
+             <Setter Property="FontSize" Value="10"/>
+             <Setter Property="Foreground" Value="#A0A0A0"/>
+             <Setter Property="Margin" Value="0,8,0,0"/>
+        </Style>
+        <Style x:Key="InputValueTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="Margin" Value="0,-14,4,0"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="16">
+
+            <TextBlock Text="Live Telemetry" FontSize="18" FontWeight="Bold" Margin="0,0,0,16"/>
+
+            <!-- Speed -->
+            <Grid Margin="0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" MinWidth="60"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Speed:" Style="{StaticResource DataLabelStyle}"/>
+                <TextBlock Grid.Column="1" Text="{Binding CurrentTelemetry.Car.Speed, StringFormat='{}{0:F0}', FallbackValue=0}" Style="{StaticResource DataValueStyle}"/>
+                <TextBlock Grid.Column="2" Text="km/h" Style="{StaticResource DataUnitStyle}"/>
+            </Grid>
+
+            <!-- RPM -->
+            <Grid Margin="0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" MinWidth="60"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="RPM:" Style="{StaticResource DataLabelStyle}"/>
+                <TextBlock Grid.Column="1" Text="{Binding CurrentTelemetry.Car.RPM, StringFormat='{}{0:F0}', FallbackValue=0}" Style="{StaticResource DataValueStyle}"/>
+                <TextBlock Grid.Column="2" Text="rpm" Style="{StaticResource DataUnitStyle}"/>
+            </Grid>
+
+            <!-- Gear -->
+            <Grid Margin="0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" MinWidth="60"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Gear:" Style="{StaticResource DataLabelStyle}"/>
+                <!-- Use the converter -->
+                <TextBlock Grid.Column="1" Text="{Binding CurrentTelemetry.Car.Gear, Converter={StaticResource GearToStringConverter}, FallbackValue=N}" Style="{StaticResource DataValueStyle}"/>
+            </Grid>
+
+            <!-- Throttle -->
+            <TextBlock Text="Throttle" Style="{StaticResource InputLabelStyle}"/>
+            <ProgressBar Value="{Binding CurrentTelemetry.Car.Throttle, FallbackValue=0}" Maximum="1" Style="{StaticResource ThrottleProgressBarStyle}"/>
+            <TextBlock Text="{Binding CurrentTelemetry.Car.Throttle, StringFormat='{}{0:P0}', FallbackValue=0%}" Style="{StaticResource InputValueTextStyle}"/>
+
+            <!-- Brake -->
+            <TextBlock Text="Brake" Style="{StaticResource InputLabelStyle}"/>
+            <ProgressBar Value="{Binding CurrentTelemetry.Car.Brake, FallbackValue=0}" Maximum="1" Style="{StaticResource BrakeProgressBarStyle}"/>
+            <TextBlock Text="{Binding CurrentTelemetry.Car.Brake, StringFormat='{}{0:P0}', FallbackValue=0%}" Style="{StaticResource InputValueTextStyle}"/>
+
+            <!-- Clutch (Optional - Bind Visibility if not always available) -->
+            <TextBlock Text="Clutch" Style="{StaticResource InputLabelStyle}"/>
+            <ProgressBar Value="{Binding CurrentTelemetry.Car.Clutch, FallbackValue=0}" Maximum="1" Style="{StaticResource ClutchProgressBarStyle}"/>
+            <TextBlock Text="{Binding CurrentTelemetry.Car.Clutch, StringFormat='{}{0:P0}', FallbackValue=0%}" Style="{StaticResource InputValueTextStyle}"/>
+
+            <!-- Steering -->
+            <TextBlock Text="Steering" Style="{StaticResource InputLabelStyle}"/>
+            <!-- Steering Value: -1 (Left) to 1 (Right). ProgressBar shows absolute. Text shows precise value. -->
+            <ProgressBar Value="{Binding CurrentTelemetry.Car.Steering, Converter={StaticResource AbsoluteValueConverter}, FallbackValue=0}" Maximum="1" Style="{StaticResource SteeringProgressBarStyle}"/>
+            <TextBlock Text="{Binding CurrentTelemetry.Car.Steering, StringFormat='{}{0:F2}', FallbackValue=0.00}" Style="{StaticResource InputValueTextStyle}"/>
+
+            <!-- Session Info -->
+            <Separator Margin="0,16" Background="#FF404040"/>
+            <TextBlock Text="Session Info" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,8"/>
+
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="80"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Lap:" Style="{StaticResource DataLabelStyle}"/>
+                <TextBlock Grid.Column="1" Text="{Binding CurrentTelemetry.Session.CurrentLap, FallbackValue=0}" Style="{StaticResource DataValueStyle}"/>
+            </Grid>
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="80"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Lap Time:" Style="{StaticResource DataLabelStyle}"/>
+                <!-- Corrected StringFormat for TimeSpan -->
+                <TextBlock Grid.Column="1" Text="{Binding CurrentTelemetry.Session.CurrentLapTime, StringFormat='mm\\:ss\\.fff', FallbackValue=00:00.000}" Style="{StaticResource DataValueStyle}"/>
+            </Grid>
+             <Grid Margin="0,2">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="80"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Best Lap:" Style="{StaticResource DataLabelStyle}"/>
+                 <!-- Corrected StringFormat for TimeSpan -->
+                <TextBlock Grid.Column="1" Text="{Binding CurrentTelemetry.Session.BestLapTime, StringFormat='mm\\:ss\\.fff', FallbackValue=--:--.---}" Style="{StaticResource DataValueStyle}"/>
+            </Grid>
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="80"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Position:" Style="{StaticResource DataLabelStyle}"/>
+                <TextBlock Grid.Column="1" Text="{Binding CurrentTelemetry.Session.Position, FallbackValue=0}" Style="{StaticResource DataValueStyle}"/>
+            </Grid>
+            <Grid Margin="0,2">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="80"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Time Left:" Style="{StaticResource DataLabelStyle}"/>
+                 <!-- Corrected StringFormat for TimeSpan -->
+                <TextBlock Grid.Column="1" Text="{Binding CurrentTelemetry.Session.SessionTime, StringFormat='hh\\:mm\\:ss', FallbackValue=--:--:--}" Style="{StaticResource DataValueStyle}"/>
+            </Grid>
+
+            <!-- Add more data points as needed (Tires, Fuel, Temps etc.) -->
+            <Separator Margin="0,16" Background="#FF404040"/>
+            <TextBlock Text="Car Status" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,8"/>
+
+             <Grid Margin="0,2">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" MinWidth="80"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Fuel:" Style="{StaticResource DataLabelStyle}"/>
+                <TextBlock Grid.Column="1" Text="{Binding CurrentTelemetry.Car.FuelLevel, StringFormat='{}{0:F1} L', FallbackValue=0.0}" Style="{StaticResource DataValueStyle}"/>
+            </Grid>
+            <!-- Add Tire Data (might need a dedicated control or ItemsControl) -->
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
+

@@ -1,0 +1,15 @@
+C:\Users\ezequ\Downloads\telemetry_analyzer_project_v7_final\project_telemetry\TelemetryAnalyzer\obj\Release\net8.0-windows\TelemetryAnalyzer.csproj.AssemblyReference.cache
+C:\Users\ezequ\Downloads\telemetry_analyzer_project_v7_final\project_telemetry\TelemetryAnalyzer\obj\Release\net8.0-windows\presentation\WPF\Controls\ComparisonSetupControl.baml
+C:\Users\ezequ\Downloads\telemetry_analyzer_project_v7_final\project_telemetry\TelemetryAnalyzer\obj\Release\net8.0-windows\presentation\WPF\Controls\PerformanceAnalysisControl.baml
+C:\Users\ezequ\Downloads\telemetry_analyzer_project_v7_final\project_telemetry\TelemetryAnalyzer\obj\Release\net8.0-windows\presentation\WPF\Controls\TelemetryChart.baml
+C:\Users\ezequ\Downloads\telemetry_analyzer_project_v7_final\project_telemetry\TelemetryAnalyzer\obj\Release\net8.0-windows\presentation\WPF\Controls\TrackMapControl.baml
+C:\Users\ezequ\Downloads\telemetry_analyzer_project_v7_final\project_telemetry\TelemetryAnalyzer\obj\Release\net8.0-windows\presentation\WPF\Controls\ComparisonSetupControl.g.cs
+C:\Users\ezequ\Downloads\telemetry_analyzer_project_v7_final\project_telemetry\TelemetryAnalyzer\obj\Release\net8.0-windows\presentation\WPF\Controls\LiveDataPanel.g.cs
+C:\Users\ezequ\Downloads\telemetry_analyzer_project_v7_final\project_telemetry\TelemetryAnalyzer\obj\Release\net8.0-windows\presentation\WPF\Controls\PerformanceAnalysisControl.g.cs
+C:\Users\ezequ\Downloads\telemetry_analyzer_project_v7_final\project_telemetry\TelemetryAnalyzer\obj\Release\net8.0-windows\presentation\WPF\Controls\SessionLapSelector.g.cs
+C:\Users\ezequ\Downloads\telemetry_analyzer_project_v7_final\project_telemetry\TelemetryAnalyzer\obj\Release\net8.0-windows\presentation\WPF\Controls\TelemetryChart.g.cs
+C:\Users\ezequ\Downloads\telemetry_analyzer_project_v7_final\project_telemetry\TelemetryAnalyzer\obj\Release\net8.0-windows\presentation\WPF\Controls\TrackMapControl.g.cs
+C:\Users\ezequ\Downloads\telemetry_analyzer_project_v7_final\project_telemetry\TelemetryAnalyzer\obj\Release\net8.0-windows\presentation\WPF\MainWindow.g.cs
+C:\Users\ezequ\Downloads\telemetry_analyzer_project_v7_final\project_telemetry\TelemetryAnalyzer\obj\Release\net8.0-windows\GeneratedInternalTypeHelper.g.cs
+C:\Users\ezequ\Downloads\telemetry_analyzer_project_v7_final\project_telemetry\TelemetryAnalyzer\obj\Release\net8.0-windows\TelemetryAnalyzer_MarkupCompile.cache
+C:\Users\ezequ\Downloads\telemetry_analyzer_project_v7_final\project_telemetry\TelemetryAnalyzer\obj\Release\net8.0-windows\TelemetryAnalyzer_MarkupCompile.lref
